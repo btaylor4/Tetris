@@ -157,6 +157,12 @@ Shape *generatePart(int board[22][12])
 {
     partsCreated++;
     
+    if(partsCreated > 5) //use this logic to speed up process for levels
+    {
+        partsCreated = 0;
+        speed -= 100;
+    }
+    
     srand(time(NULL));
 
     int random = rand() % 2; // numbers 0 to 1
