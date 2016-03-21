@@ -112,16 +112,17 @@ void Timer(int a)
     
     if(typeid(*x) == typeid(Square)) //if we are dealing with a sqare block
     {
-        if(board[x->Y4+1][x->X4] == 0) //this will only work for a line right now and square
+        //board[x->Y4+1][x->X4] == 0
+        if(x->moveDown(board)) //this will only work for a line right now and square
         {
-            x->moveDown(board);
             glutTimerFunc(1000, Timer, 0);
             glutDisplayFunc(draw);
             glutSpecialFunc(keys);
             glutPostRedisplay();
         }
         
-        else if(board[x->Y4+1][x->X4] != 0) // if the cube reached the bottom
+        //board[x->Y4+1][x->X4] != 0
+        else if(!x->moveDown(board)) // if the cube reached the bottom
         {
             free(x);
             change = false;
@@ -133,16 +134,15 @@ void Timer(int a)
     
     else if(typeid(*x) == typeid(Line)) //if we are dealing with a line block
     {
-        if(board[x->Y4+1][x->X4] == 0) //this will only work for a line right now and square
+        if(x->moveDown(board)) //this will only work for a line right now and square
         {
-            x->moveDown(board);
             glutTimerFunc(1000, Timer, 0);
             glutDisplayFunc(draw);
             glutSpecialFunc(keys);
             glutPostRedisplay();
         }
         
-        else if(board[x->Y4+1][x->X4] != 0) // generate and draw soon after
+        else if(!x->moveDown(board)) // generate and draw soon after
         {
             free(x);
             change = false;
@@ -161,7 +161,7 @@ Shape *generatePart(int board[22][12])
 
     int random = rand() % 2; // numbers 0 to 1
     
-    switch(0)
+    switch(random)
     {
         case 0:
             // generate Cube

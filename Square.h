@@ -118,7 +118,12 @@ void Square::moveRight(int board[22][12]) //something wonky here
 
 bool Square::moveDown(int board[22][12])
 {
-    if(Y3 != 20 && board[Y3+1][X3] == 0 && board[Y4+1][X4] == 0)
+    if(board[Y3+1][X3] != 0 || board[Y4+1][X4] != 0)
+    {
+        return false;
+    }
+    
+    else if(Y3 != 20 && board[Y3+1][X3] == 0 && board[Y4+1][X4] == 0)
     {
         Y1 = Y1 + 1;
         board[Y1-1][X1] = 0;
@@ -135,9 +140,21 @@ bool Square::moveDown(int board[22][12])
         return true;
     }
     
-    else if(board[Y3+1][X3] != 0 || board[Y4+1][X4] != 0)
+    else if(Y4 != 20 && board[Y4+1][X4] == 0 && board[Y3+1][X3] == 0)
     {
-        return false;
+        Y1 = Y1 + 1;
+        board[Y1-1][X1] = 0;
+        
+        Y2 = Y2 + 1;
+        board[Y2-1][X2] = 0;
+        
+        Y3 = Y3 + 1;
+        board[Y3-1][X3] = 0;
+        
+        Y4 = Y4 + 1;
+        board[Y4-1][X4] = 0;
+        
+        return true;
     }
     
     return true;
@@ -145,17 +162,25 @@ bool Square::moveDown(int board[22][12])
 
 void Square::dropSet(int board[22][12])
 {
+    int countSpace = 0;
+    
     board[Y1][X1] = 0;
     board[Y2][X2] = 0;
     board[Y3][X3] = 0;
     board[Y4][X4] = 0;
     
-    while(board[Y3+1][X3] == 0 && board[Y4+1][X4] == 0 && board[Y2+1][X2] == 0 && board[Y1+1][X1] == 0)
+    while(board[Y3+1][X3] == 0 && board[Y4+1][X4] == 0)
     {
+        countSpace++;
         Y1++;
         Y2++;
         Y3++;
         Y4++;
+    }
+    
+    for(int i = 0; i < countSpace ; i++)
+    {
+        moveDown(board);
     }
 }
 
