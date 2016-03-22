@@ -29,6 +29,7 @@ public:
     bool moveDown(int board[22][12]);
     
 private:
+    bool DROP;
     bool MOVE;
     
 };
@@ -52,6 +53,7 @@ Square::Square()
     Y4 = 2;
     
     MOVE = false;
+    DROP = true;
 }
 
 Square::~Square()
@@ -162,8 +164,6 @@ bool Square::moveDown(int board[22][12])
 
 void Square::dropSet(int board[22][12])
 {
-    int countSpace = 0;
-    
     board[Y1][X1] = 0;
     board[Y2][X2] = 0;
     board[Y3][X3] = 0;
@@ -171,17 +171,13 @@ void Square::dropSet(int board[22][12])
     
     while(board[Y3+1][X3] == 0 && board[Y4+1][X4] == 0)
     {
-        countSpace++;
         Y1++;
         Y2++;
         Y3++;
         Y4++;
     }
     
-    for(int i = 0; i < countSpace ; i++)
-    {
-        moveDown(board);
-    }
+    DROP = false;
 }
 
 #endif /* Square_h */

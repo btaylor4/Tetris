@@ -56,7 +56,7 @@ void print(int array[22][12])
 
 void keys(int key, int w, int y) //movements need to be about the
 {
-    if(key == GLUT_KEY_UP)
+    if(key == GLUT_KEY_UP && x->DROP)
     {
         //rotate method
         x->rotate(board);
@@ -64,7 +64,7 @@ void keys(int key, int w, int y) //movements need to be about the
         boardDraw(); 
     }
     
-    else if(key == GLUT_KEY_LEFT)
+    else if(key == GLUT_KEY_LEFT && x->DROP)
     {
         //left directional key
         x->moveLeft(board);
@@ -72,7 +72,7 @@ void keys(int key, int w, int y) //movements need to be about the
         boardDraw();
     }
     
-    else if(key == GLUT_KEY_RIGHT)
+    else if(key == GLUT_KEY_RIGHT && x->DROP)
     {
         //Right directional key
         x->moveRight(board);
@@ -80,7 +80,7 @@ void keys(int key, int w, int y) //movements need to be about the
         boardDraw();
     }
     
-    else if(key == GLUT_KEY_DOWN)
+    else if(key == GLUT_KEY_DOWN /*&& x->DROP*/)
     {
         //Down directional key
         x->moveDown(board);
@@ -99,11 +99,18 @@ void keys(int key, int w, int y) //movements need to be about the
 
 void Timer(int a)
 {
+    /*
+     some where along the line if I drop the line block on top of a square, if the right block is the one touching it will
+     not recreate a part...
+     */
+
     if(!change)
     {
         x = generatePart(board);
         change = true;
     }
+    
+    x->DROP = true;
     
     print(board);
     x->draw(board);
@@ -112,41 +119,45 @@ void Timer(int a)
     
     if(typeid(*x) == typeid(Square)) //if we are dealing with a sqare block
     {
-        //board[x->Y4+1][x->X4] == 0
-        if(x->moveDown(board)) //this will only work for a line right now and square
+        //board[x->Y4+1][x->X4] == 0 && board[x->Y3+1][x->X3] == 0
+        if(x->moveDown(board))
         {
-            glutTimerFunc(1000, Timer, 0);
             glutDisplayFunc(draw);
             glutSpecialFunc(keys);
+            glutTimerFunc(500, Timer, 0);
             glutPostRedisplay();
         }
         
-        //board[x->Y4+1][x->X4] != 0
-        else if(!x->moveDown(board)) // if the cube reached the bottom
+        //if(board[x->Y4+1][x->X4] != 0 || board[x->Y3+1][x->X3] != 0)
+        // if the cube reached the bottom
+        else if(!x->moveDown(board))
         {
             free(x);
             change = false;
-            glutTimerFunc(10, Timer, 0);
             glutDisplayFunc(draw);
+            glutTimerFunc(1, Timer, 0);
             glutPostRedisplay();
         }
     }
     
     else if(typeid(*x) == typeid(Line)) //if we are dealing with a line block
     {
-        if(x->moveDown(board)) //this will only work for a line right now and square
+        //this will only work for a line right now and square
+         //&& board[x->Y4+1][x->X4] == 0 && board[x->Y3+1][x->X3] == 0
+        if(x->moveDown(board))
         {
-            glutTimerFunc(1000, Timer, 0);
+            glutTimerFunc(speed, Timer, 0);
             glutDisplayFunc(draw);
             glutSpecialFunc(keys);
             glutPostRedisplay();
         }
         
-        else if(!x->moveDown(board)) // generate and draw soon after
+        // generate and draw soon after
+        else if(!x->moveDown(board))
         {
             free(x);
             change = false;
-            glutTimerFunc(10, Timer, 0);
+            glutTimerFunc(1, Timer, 0);
             glutDisplayFunc(draw);
             glutPostRedisplay();
         }
@@ -157,11 +168,13 @@ Shape *generatePart(int board[22][12])
 {
     partsCreated++;
     
-    if(partsCreated > 5) //use this logic to speed up process for levels
+    /*
+    if(partsCreated > 1) //use this logic to speed up process for levels
     {
         partsCreated = 0;
-        speed -= 100;
+        speed = 1000;
     }
+     */
     
     srand(time(NULL));
 
@@ -340,6 +353,24 @@ int main(int argc, char * argv[])
     glutInitWindowSize(825,625);
     glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutCreateWindow("Tetris");
+    
+    
+    //glutTimerFunc(200, NULL, 0);
+    
+    //With curtosy from Lazy Foo Productions
+    //initialize SDL
+    SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO );
+    
+    //initalize Mixer API
+    Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 2048 );
+    
+    song = Mix_LoadMUS( "/Users/Bryan/Desktop/College/Computer Engineering /All Programmin'/C++ COP 3503/Function Pointers/Function Pointers/beat.mp3" );
+    
+    if( Mix_PlayingMusic() == 0 )
+    {
+        //Play the music
+        Mix_PlayMusic(song, -1);
+    }
     
     Timer(0);
     glutMainLoop();

@@ -32,6 +32,7 @@ public:
     int X4;
     int Y4;
     
+    bool DROP;
     bool ROTATE1;
 };
 

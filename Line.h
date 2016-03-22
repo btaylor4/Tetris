@@ -128,6 +128,11 @@ bool Line::moveDown(int board[22][12])
 {
     if(!ROTATE1) //if the piece has not rotated
     {
+        if(board[Y1+1][X1] != 0 || board[Y2+1][X2] != 0 || board[Y3+1][X3] != 0 || board[Y4+1][X4] != 0)
+        {
+            return false;
+        }
+        
         if(Y1 != 20 && board[Y1+1][X1] == 0 && board[Y2+1][X2] == 0 && board[Y3+1][X3] == 0 && board[Y4+1][X4] == 0)
         {
             Y1 = Y1 + 1;
@@ -135,25 +140,20 @@ bool Line::moveDown(int board[22][12])
             MOVE = true;
         }
         
-        else if(board[Y1+1][X1] != 0)
-        {
-            return false;
-        }
-        
-        if(Y2 != 20 && MOVE)
+        if(Y2 != 20 && board[Y2+1][X2] == 0 && MOVE)
         {
             Y2 = Y2 + 1;
             board[Y2-1][X2] = 0;
         }
         
-        if(Y3 != 20 && MOVE)
+        if(Y3 != 20 && board[Y3+1][X3] == 0 && MOVE)
         {
             Y3 = Y3 + 1;
             board[Y3-1][X3] = 0;
             MOVE = true;
         }
         
-        if(Y4 != 20 && MOVE)
+        if(Y4 != 20 && board[Y4+1][X4] == 0 && MOVE)
         {
             Y4 = Y4 + 1;
             board[Y4-1][X4] = 0;
@@ -166,16 +166,16 @@ bool Line::moveDown(int board[22][12])
     
     else if(ROTATE1)
     {
+        if(board[Y4+1][X4] != 0)
+        {
+            return false;
+        }
+        
         if(Y4 != 20 && board[Y4+1][X4] == 0)
         {
             Y4 = Y4 + 1;
             board[Y4-1][X4] = 0;
             MOVE = true;
-        }
-        
-        else if(board[Y4+1][X4] != 0)
-        {
-            return false;
         }
         
         if(Y3 != 20 && MOVE)
@@ -201,7 +201,7 @@ bool Line::moveDown(int board[22][12])
         return true;
     }
     
-    return false;
+    return true;
 }
 
 void Line::dropSet(int board[22][12]) // not working
@@ -211,7 +211,7 @@ void Line::dropSet(int board[22][12]) // not working
     board[Y3][X3] = 0;
     board[Y4][X4] = 0;
     
-    while(board[Y3+1][X3] == 0 && board[Y4+1][X4] == 0 && board[Y2+1][X2] == 0 && board[Y1+1][X1] == 0)
+    while(board[Y1+1][X1] == 0 && board[Y4+1][X4] == 0 && board[Y2+1][X2] == 0 && board[Y3+1][X3] == 0)
     {
         Y1++;
         Y2++;
@@ -220,8 +220,32 @@ void Line::dropSet(int board[22][12]) // not working
     }
 }
 
-void Line::rotate(int board[22][12])
+void Line::rotate(int board[22][12]) // rotates piece to the right 90 degrees
 {
+    /*
+     check first block move:
+     board[Y1-1][X1] == 0 && board[Y1-1][X1] == 0
+     
+     second block is stationary 
+     
+     check third block movement:
+     board[Y3+1][X3] == 0 && board[Y3+1][X3-1] == 0
+     
+     check last block movement
+     board[Y4+1][X4] == 0 && board[Y4+2][X4] == 0&& board[Y4+1][X4-1] == 0
+     
+     */
+    if(!ROTATE1 && (board[Y1-1][X1+1] != 0 || board[Y3+1][X3-1] != 0 || board[Y4+2][X4-2] != 0))
+    {
+        return;
+    }
+    
+    else if(ROTATE1 && (board[Y1+1][X1-1] != 0 || board[Y3-1][X3+1] != 0 || board[Y4-2][X4+2] != 0))
+    {
+        return;
+    }
+    
+    //if piece has not rotated yet
     if(board[Y1-1][X1+1] == 0 && board[Y3+1][X3-1] == 0 && board[Y4+2][X4-2] == 0 && !ROTATE1)
     {
         Y1 = Y1 - 1;

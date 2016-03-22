@@ -9,9 +9,12 @@
 #ifndef main_h
 #define main_h
 
+#include <SDL2/SDL.h>
+#include <SDL2_mixer/SDL_mixer.h>
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
+#include <cstdio>
 #include <stdarg.h>
 #include <string.h>
 #include <time.h>
@@ -23,15 +26,17 @@
 
 using namespace std;
 
-static bool change = false;
 Shape *x;
 Square cube;
 Line line;
+Mix_Music *song = NULL;
 static int speed = 1000;
 static int partsCreated = 0;
+static bool change = false;
 
 Shape *generatePart(int board[22][12]);
 bool checkLose(string type, int array[22][12]);
+bool init();
 void draw();
 void fallTimer(int a);
 void Timer(int a);
@@ -64,7 +69,5 @@ int board[22][12] =
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
-
-
 
 #endif /* main_h */
