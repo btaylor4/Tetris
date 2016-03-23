@@ -7,38 +7,16 @@
 //
 
 /////////////////////////////// NOTES //////////////////////////////////
+
 /*
- window size is 825 x 625 (x-length, y-length)
- 
- draw function takes floats 0-10
- 
- if we had x and y as coordinates in our window pane (0,0) would be the bottom left corner.
- (10,10) would be top right corner
- 
- Border number is .3 in length in x direction, so 24.75 pixels in the x direction
- Shapes are going to be .2 away from the border so .3 + .2 =
- 
- If each square is .4, then in the square = 33 pixels * 10pieces = at least 330 pixels across for playing space
-    -this does not include the distance between every square in the same shape
- 
- Where to Place border according to above numbers:
-    -825 - 330 = 495 + 24.75 = 519.75(this will be the left edge of our left border)
-    -Then + 24.75 = 544.5 (this will be the right edge of our left border)
- 
- How far do we want the distance between our border and our shapes (will x and y be the same)?
-    -I am thinking .2
- How far do we want the distance between our spaces between each square in our shape
- 
- Objects: Inheritance
- Data fields: string for the type, 4 i coordinates, 4 j coordinates, function which is overriden
- 
- if each square is .4 in the x direction is 33 pixels * 10pieces = at least 330 pixels across for space
- 825 - 330 = 495(this will be the left edge of our left border.
+ Modeling tetris based off of a 2D array
  */
+
 ///////////////////////////////////////////////////////////////////////
 
 #include "main.h" 
 
+//this prints our board to the console and is used for testing
 void print(int array[22][12])
 {
     for(int i = 0; i < 22; i ++)
@@ -54,38 +32,40 @@ void print(int array[22][12])
     cout << endl;
 }
 
+//this function takes in our keyboard inputs
 void keys(int key, int w, int y) //movements need to be about the
 {
+    //Remember to add option to quit which is the esc key
     if(key == GLUT_KEY_UP && x->DROP)
     {
         //rotate method
-        x->rotate(board);
-        x->draw(board);
-        boardDraw(); 
+        x->rotate(board); // rotate our shape
+        x->draw(board); //draw our shape to the array
+        boardDraw();  //draw our shape to the screen
     }
     
     else if(key == GLUT_KEY_LEFT && x->DROP)
     {
         //left directional key
-        x->moveLeft(board);
-        x->draw(board);
-        boardDraw();
+        x->moveLeft(board); //moves our shape to the left
+        x->draw(board); //draw our shape to the array
+        boardDraw(); //draw our shape to the screen
     }
     
     else if(key == GLUT_KEY_RIGHT && x->DROP)
     {
         //Right directional key
-        x->moveRight(board);
-        x->draw(board);
-        boardDraw();
+        x->moveRight(board); //moves our shape to the right
+        x->draw(board); //draw our shape to the array
+        boardDraw(); //draw our shape to the screen
     }
     
     else if(key == GLUT_KEY_DOWN /*&& x->DROP*/)
     {
         //Down directional key
-        x->moveDown(board);
-        x->draw(board);
-        boardDraw();
+        x->moveDown(board); //moves the shape down
+        x->draw(board); //draw our shape to the array
+        boardDraw(); //draw our shape to the screen
     }
     
     else if (key == 32) //space key
@@ -104,33 +84,35 @@ void Timer(int a)
      not recreate a part...
      */
 
-    if(!change)
+    if(!change) //checks to see if we are dealing with the same shape
     {
-        x = generatePart(board);
-        change = true;
+        x = generatePart(board); // if the shape has set, generate a new shape
+        change = true; // set change to true to not generate a new shape until the one we just generated sets
     }
     
+    //Drop variable to set to true so that we cannot move once we drop set
+    //if this is not here it will not work for some reason
     x->DROP = true;
     
+    //display board to console for testing
     print(board);
-    x->draw(board);
+    x->draw(board); //draw shape to board
     print(board);
-    boardDraw();
+    boardDraw(); // draw shape to screen window
     
-    if(typeid(*x) == typeid(Square)) //if we are dealing with a sqare block
+    if(typeid(*x) == typeid(Square)) //if we are dealing with a sqare block (C++ version of java instanceof)
     {
         //board[x->Y4+1][x->X4] == 0 && board[x->Y3+1][x->X3] == 0
-        if(x->moveDown(board))
+        if(x->moveDown(board)) //check if down move is available
         {
             glutDisplayFunc(draw);
             glutSpecialFunc(keys);
-            glutTimerFunc(500, Timer, 0);
+            glutTimerFunc(speed, Timer, 0);
             glutPostRedisplay();
         }
         
         //if(board[x->Y4+1][x->X4] != 0 || board[x->Y3+1][x->X3] != 0)
-        // if the cube reached the bottom
-        else if(!x->moveDown(board))
+        else if(!x->moveDown(board))// if the cube reached the bottom
         {
             free(x);
             change = false;
@@ -166,6 +148,12 @@ void Timer(int a)
 
 Shape *generatePart(int board[22][12])
 {
+    /*
+     This method is to generate new parts
+     Once you believe your classes are done, do x = new YOURSHAPE();
+     Then x->draw(board) (We may not need this call since our timer function has it...
+     */
+    
     partsCreated++;
     
     /*
@@ -180,7 +168,7 @@ Shape *generatePart(int board[22][12])
 
     int random = rand() % 2; // numbers 0 to 1
     
-    switch(random)
+    switch(random) //chooses a shape at random
     {
         case 0:
             // generate Cube
@@ -217,11 +205,12 @@ Shape *generatePart(int board[22][12])
             break;
     }
     
-    return x;
+    return x; // return our shape
 }
 
 void boardDraw()
 {
+    //This method takes care of drawing our shapes in our window
     glClear( GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
     drawBorder();
 
@@ -238,7 +227,7 @@ void boardDraw()
                     glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);
                     
                     glBegin(GL_POLYGON);
-                    glColor3f(1, 1, 0);
+                    glColor3f(1, 1, 0); //color of our block
                     glVertex3f(.35 + .45 * (j-1), 9.67 - .47 * (i-1), 0.0); // top left corner
                     glVertex3f(.75 + .45 * (j-1), 9.67 - .47 * (i-1), 0.0); // top right corner
                     glVertex3f(.75 + .45 * (j-1), 9.27 - .47 * (i-1), 0.0); // bottom right corner
@@ -349,14 +338,17 @@ void draw()
 
 int main(int argc, char * argv[])
 {
-    glutInit(&argc, argv);
-    glutInitWindowSize(825,625);
-    glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutCreateWindow("Tetris");
+    glutInit(&argc, argv); //initializes our window
+    glutInitWindowSize(825,625); //sets our window size
+    glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); //sets the display mode
+    glutCreateWindow("Tetris"); //The title of our window
     
-    
-    //glutTimerFunc(200, NULL, 0);
-    
+    /*
+     This is for music but may not work.  Since it is not essential to testing, 
+     I commented this and the necessary includes out so it will not crash your program
+     
+     CODE:
+
     //With curtosy from Lazy Foo Productions
     //initialize SDL
     SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO );
@@ -364,6 +356,8 @@ int main(int argc, char * argv[])
     //initalize Mixer API
     Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 2048 );
     
+    //This will not work for people not using my folder
+    //make sure you change the path if you are using a differnet system and folder
     song = Mix_LoadMUS( "/Users/Bryan/Desktop/College/Computer Engineering /All Programmin'/C++ COP 3503/Function Pointers/Function Pointers/beat.mp3" );
     
     if( Mix_PlayingMusic() == 0 )
@@ -371,8 +365,9 @@ int main(int argc, char * argv[])
         //Play the music
         Mix_PlayMusic(song, -1);
     }
+     */
     
-    Timer(0);
+    Timer(0); // our Main timer function
     glutMainLoop();
     
     return 0;

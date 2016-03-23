@@ -71,6 +71,8 @@ void Square::draw(int board[22][12])
 
 void Square::moveLeft(int board[22][12])
 {
+    //this logic is incorrect right now
+    //need to implement check before these if statments, check moveDown's first if of line's methods
     if(X1 != 1 && board[Y1][X1-1] == 0)
     {
         X1 = X1 - 1;
@@ -102,6 +104,8 @@ void Square::moveLeft(int board[22][12])
 
 void Square::moveRight(int board[22][12]) //something wonky here
 {
+    //this logic is incorrect right now
+    //need to implement check before these if statments, check moveDown's first if
     if(X2 != 10 && board[Y2][X2+1] == 0 && board[Y4][X4+1] == 0)
     {
         X1 = X1 + 1;
@@ -120,7 +124,7 @@ void Square::moveRight(int board[22][12]) //something wonky here
 
 bool Square::moveDown(int board[22][12])
 {
-    if(board[Y3+1][X3] != 0 || board[Y4+1][X4] != 0)
+    if(board[Y3+1][X3] != 0 || board[Y4+1][X4] != 0) // checks if move is even possible before continuing
     {
         return false;
     }
@@ -162,7 +166,7 @@ bool Square::moveDown(int board[22][12])
     return true;
 }
 
-void Square::dropSet(int board[22][12])
+void Square::dropSet(int board[22][12]) //sets piece instantly below to where ever it first collides 
 {
     board[Y1][X1] = 0;
     board[Y2][X2] = 0;

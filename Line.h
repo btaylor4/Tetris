@@ -65,63 +65,150 @@ void Line::draw(int board[22][12])
 
 void Line::moveLeft(int board[22][12])
 {
-    if(X1 != 1 && board[Y1][X1-1] == 0)
+    if(!ROTATE1)
     {
-        X1 = X1 - 1;
-        board[Y1][X1+1] = 0;
-        MOVE = true;
+        if(board[Y1][X1-1] != 0)
+        {
+            return;
+        }
+        
+        if(X1 != 1 && board[Y1][X1-1] == 0)
+        {
+            X1 = X1 - 1;
+            board[Y1][X1+1] = 0;
+            MOVE = true;
+        }
+        
+        if(X2 != 1 && MOVE)
+        {
+            X2 = X2 - 1;
+            board[Y2][X2+1] = 0;
+        }
+        
+        if(X3 != 1 && MOVE)
+        {
+            X3 = X3 - 1;
+            board[Y3][X3+1] = 0;
+            MOVE = true;
+        }
+        
+        if(X4 != 1 && MOVE)
+        {
+            X4 = X4 - 1;
+            board[Y4][X4+1] = 0;
+        }
+        
+        MOVE = false;
     }
     
-    if(X2 != 1 && MOVE)
+    else if (ROTATE1)
     {
-        X2 = X2 - 1;
-        board[Y2][X2+1] = 0;
+        if(board[Y1][X1-1] != 0 || board[Y2][X2-1] != 0 || board[Y3][X3-1] != 0 || board[Y4][X4-1] != 0)
+        {
+            return;
+        }
+        
+        if(X1 != 1 && board[Y1][X1-1] == 0)
+        {
+            X1 = X1 - 1;
+            board[Y1][X1+1] = 0;
+            MOVE = true;
+        }
+        
+        if(X2 != 1 && MOVE)
+        {
+            X2 = X2 - 1;
+            board[Y2][X2+1] = 0;
+        }
+        
+        if(X3 != 1 && MOVE)
+        {
+            X3 = X3 - 1;
+            board[Y3][X3+1] = 0;
+            MOVE = true;
+        }
+        
+        if(X4 != 1 && MOVE)
+        {
+            X4 = X4 - 1;
+            board[Y4][X4+1] = 0;
+        }
+        
+        MOVE = false;
     }
-    
-    if(X3 != 1 && MOVE)
-    {
-        X3 = X3 - 1;
-        board[Y3][X3+1] = 0;
-        MOVE = true;
-    }
-    
-    if(X4 != 1 && MOVE)
-    {
-        X4 = X4 - 1;
-        board[Y4][X4+1] = 0;
-    }
-    
-    MOVE = false;
 }
 
 void Line::moveRight(int board[22][12])
 {
-    if(X4 != 11 && board[Y4][X4+1] == 0)
+    if(!ROTATE1)
     {
-        X4 = X4 + 1;
-        board[Y4][X4-1] = 0;
-        MOVE = true;
+        if(board[Y4][X4+1] != 0)
+        {
+            return;
+        }
+        
+        if(X4 != 11 && board[Y4][X4+1] == 0)
+        {
+            X4 = X4 + 1;
+            board[Y4][X4-1] = 0;
+            MOVE = true;
+        }
+        
+        if(X3 != 11 && MOVE)
+        {
+            X3 = X3 + 1;
+            board[Y3][X3-1] = 0;
+        }
+        
+        if(X2 != 11 && MOVE)
+        {
+            X2 = X2 + 1;
+            board[Y2][X2-1] = 0;
+        }
+        
+        if(X1 != 11 && MOVE)
+        {
+            X1 = X1 + 1;
+            board[Y1][X1-1] = 0;
+        }
+        
+        MOVE = false;
     }
     
-    if(X3 != 11 && MOVE)
+    else if(ROTATE1)
     {
-        X3 = X3 + 1;
-        board[Y3][X3-1] = 0;
+        if(board[Y4][X4+1] != 0 || board[Y3][X3+1] != 0 || board[Y2][X2+1] != 0 || board[Y1][X1+1] != 0 )
+        {
+            return;
+        }
+        
+        if(X4 != 11 && board[Y4][X4+1] == 0)
+        {
+            X4 = X4 + 1;
+            board[Y4][X4-1] = 0;
+            MOVE = true;
+        }
+        
+        if(X3 != 11 && MOVE)
+        {
+            X3 = X3 + 1;
+            board[Y3][X3-1] = 0;
+        }
+        
+        if(X2 != 11 && MOVE)
+        {
+            X2 = X2 + 1;
+            board[Y2][X2-1] = 0;
+        }
+        
+        if(X1 != 11 && MOVE)
+        {
+            X1 = X1 + 1;
+            board[Y1][X1-1] = 0;
+        }
+        
+        MOVE = false;
     }
-    
-    if(X2 != 11 && MOVE)
-    {
-        X2 = X2 + 1;
-        board[Y2][X2-1] = 0;
-    }
-    
-    if(X1 != 11 && MOVE)
-    {
-        X1 = X1 + 1;
-        board[Y1][X1-1] = 0;
-    }
-    
-    MOVE = false;
 }
 
 bool Line::moveDown(int board[22][12])
@@ -204,7 +291,7 @@ bool Line::moveDown(int board[22][12])
     return true;
 }
 
-void Line::dropSet(int board[22][12]) // not working
+void Line::dropSet(int board[22][12]) // not working fully
 {
     board[Y1][X1] = 0;
     board[Y2][X2] = 0;

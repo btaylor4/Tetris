@@ -9,8 +9,8 @@
 #ifndef main_h
 #define main_h
 
-#include <SDL2/SDL.h>
-#include <SDL2_mixer/SDL_mixer.h>
+//#include <SDL2/SDL.h>
+//#include <SDL2_mixer/SDL_mixer.h>
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
@@ -29,7 +29,7 @@ using namespace std;
 Shape *x;
 Square cube;
 Line line;
-Mix_Music *song = NULL;
+//Mix_Music *song = NULL;
 static int speed = 1000;
 static int partsCreated = 0;
 static bool change = false;
