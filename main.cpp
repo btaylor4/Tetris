@@ -114,7 +114,6 @@ void Timer(int a)
         //if(board[x->Y4+1][x->X4] != 0 || board[x->Y3+1][x->X3] != 0)
         else if(!x->moveDown(board))// if the cube reached the bottom
         {
-            free(x);
             change = false;
             glutDisplayFunc(draw);
             glutTimerFunc(1, Timer, 0);
@@ -137,7 +136,6 @@ void Timer(int a)
         // generate and draw soon after
         else if(!x->moveDown(board))
         {
-            free(x);
             change = false;
             glutTimerFunc(1, Timer, 0);
             glutDisplayFunc(draw);
@@ -168,7 +166,7 @@ Shape *generatePart(int board[22][12])
 
     int random = rand() % 2; // numbers 0 to 1
     
-    switch(random) //chooses a shape at random
+    switch(1) //chooses a shape at random
     {
         case 0:
             // generate Cube
