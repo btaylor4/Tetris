@@ -35,6 +35,8 @@ private:
 
 Line::Line()
 {
+    /*
+    These coordinates are to generate the part horizontally
     X1 = 5;
     Y1 = 2;
     
@@ -46,8 +48,21 @@ Line::Line()
     
     X4 = 8;
     Y4 = 2;
+     */
+
+    X1 = 6;
+    Y1 = 0;
     
-    ROTATE1 = false;
+    X2 = 6;
+    Y2 = 1;
+    
+    X3 = 6;
+    Y3 = 2;
+    
+    X4 = 6;
+    Y4 = 3;
+    
+    ROTATE1 = true;
 }
 
 Line::~Line()
