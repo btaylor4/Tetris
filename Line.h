@@ -26,6 +26,7 @@ public:
     bool moveDown(int board[22][12]);
     
 private:
+    bool DROP;
     bool ROTATE1;
     bool ROTATE2;
     bool ROTATE3;
@@ -35,8 +36,7 @@ private:
 
 Line::Line()
 {
-    /*
-    These coordinates are to generate the part horizontally
+    //These coordinates are to generate the part horizontally
     X1 = 5;
     Y1 = 2;
     
@@ -48,8 +48,14 @@ Line::Line()
     
     X4 = 8;
     Y4 = 2;
-     */
+    
+    ROTATE1 = false;
+    ROTATE2 = false;
+    ROTATE3 = false;
+    DROP = false;
 
+    /*
+    //These coordinates are to generate the part vertically
     X1 = 6;
     Y1 = 0;
     
@@ -63,6 +69,7 @@ Line::Line()
     Y4 = 3;
     
     ROTATE1 = true;
+     */
 }
 
 Line::~Line()
@@ -80,7 +87,7 @@ void Line::draw(int board[22][12])
 
 void Line::moveLeft(int board[22][12])
 {
-    if(!ROTATE1)
+    if(!ROTATE1 && !ROTATE2 && !ROTATE3)
     {
         if(board[Y1][X1-1] != 0)
         {
@@ -103,7 +110,7 @@ void Line::moveLeft(int board[22][12])
         }
     }
     
-    else if (ROTATE1)
+    else if (ROTATE1 && !ROTATE2)
     {
         if(board[Y1][X1-1] != 0 || board[Y2][X2-1] != 0 || board[Y3][X3-1] != 0 || board[Y4][X4-1] != 0)
         {
@@ -111,6 +118,29 @@ void Line::moveLeft(int board[22][12])
         }
         
         else if(X1 != 1 && board[Y1][X1-1] == 0 && board[Y2][X2-1] == 0 && board[Y3][X3-1] == 0 && board[Y4][X4-1] == 0)
+        {
+            X1 = X1 - 1;
+            board[Y1][X1+1] = 0;
+            
+            X2 = X2 - 1;
+            board[Y2][X2+1] = 0;
+            
+            X3 = X3 - 1;
+            board[Y3][X3+1] = 0;
+            
+            X4 = X4 - 1;
+            board[Y4][X4+1] = 0;
+        }
+    }
+    
+    else if (ROTATE1 && ROTATE2)
+    {
+        if(board[Y4][X4-1] != 0)
+        {
+            return;
+        }
+        
+        else if(X4 != 1 && board[Y4][X4-1] == 0)
         {
             X1 = X1 - 1;
             board[Y1][X1+1] = 0;
@@ -152,7 +182,7 @@ void Line::moveRight(int board[22][12])
         }
     }
     
-    else if(ROTATE1)
+    else if(ROTATE1 && !ROTATE2)
     {
         if(board[Y4][X4+1] != 0 || board[Y3][X3+1] != 0 || board[Y2][X2+1] != 0 || board[Y1][X1+1] != 0)
         {
@@ -160,6 +190,29 @@ void Line::moveRight(int board[22][12])
         }
         
         else if(X4 != 11 && board[Y4][X4+1] == 0 && board[Y3][X3+1] == 0 && board[Y2][X2+1] == 0 && board[Y1][X1+1] == 0)
+        {
+            X1 = X1 + 1;
+            board[Y1][X1-1] = 0;
+            
+            X2 = X2 + 1;
+            board[Y2][X2-1] = 0;
+            
+            X3 = X3 + 1;
+            board[Y3][X3-1] = 0;
+            
+            X4 = X4 + 1;
+            board[Y4][X4-1] = 0;
+        }
+    }
+    
+    else if(ROTATE1 && ROTATE2)
+    {
+        if(board[Y1][X1+1] != 0)
+        {
+            return;
+        }
+        
+        else if(X1 != 11 && board[Y1][X1+1] == 0)
         {
             X1 = X1 + 1;
             board[Y1][X1-1] = 0;
@@ -203,7 +256,7 @@ bool Line::moveDown(int board[22][12])
         return true;
     }
     
-    else if(ROTATE1)
+    else if(ROTATE1 && !ROTATE3)
     {
         if(board[Y4+1][X4] != 0)
         {
@@ -211,6 +264,31 @@ bool Line::moveDown(int board[22][12])
         }
         
         else if(Y4 != 20 && board[Y4+1][X4] == 0)
+        {
+            Y1 = Y1 + 1;
+            board[Y1-1][X1] = 0;
+            
+            Y2 = Y2 + 1;
+            board[Y2-1][X2] = 0;
+            
+            Y3 = Y3 + 1;
+            board[Y3-1][X3] = 0;
+            
+            Y4 = Y4 + 1;
+            board[Y4-1][X4] = 0;
+        }
+        
+        return true;
+    }
+    
+    else if(ROTATE1 && ROTATE3)
+    {
+        if(board[Y1+1][X1] != 0)
+        {
+            return false;
+        }
+        
+        else if(Y1 != 20 && board[Y1+1][X1] == 0)
         {
             Y1 = Y1 + 1;
             board[Y1-1][X1] = 0;
@@ -245,100 +323,173 @@ void Line::dropSet(int board[22][12]) // not working fully
         Y3++;
         Y4++;
     }
+    
+    DROP = false;
 }
 
 void Line::rotate(int board[22][12]) // rotates piece to the right 90 degrees
 {
-    /*
-     check first block move:
-     board[Y1-1][X1] == 0 && board[Y1-1][X1] == 0
-     
-     second block is stationary 
-     
-     check third block movement:
-     board[Y3+1][X3] == 0 && board[Y3+1][X3-1] == 0
-     
-     check last block movement
-     board[Y4+1][X4] == 0 && board[Y4+2][X4] == 0&& board[Y4+1][X4-1] == 0
-     
-     */
-    
-    if(!ROTATE1)
+    if(!ROTATE1 && !ROTATE2 && !ROTATE3) //original piece (This is working)
     {
         //checking if the first block can move
-        if(board[Y1-1][X1] != 0 || board[Y1-1][X1+1] != 0)
+        if(board[Y1-1][X1] != 0 || board[Y1-1][X1+1] != 0 || board[Y1-1][X1+2] != 0)
         {
             return;
         }
         
-        //second block will not change
-        
         //check the third block movement
-        else if(board[Y3+1][X3] != 0 || board[Y3+1][X3-1] != 0)
+        else if(board[Y3+1][X3] != 0)
         {
             return;
         }
         
         //checking fourth block movement
-        else if(board[Y4-1][X4] != 0 || board[Y4-2][X4] != 0 || board[Y4-1][X4-1] != 0 || board[Y4-2][X4-2])
+        else if(board[Y4+1][X4] != 0 || board[Y4+2][X4] != 0 || board[Y4+2][X4-1] != 0)
         {
             return;
         }
         
-        else if(board[Y1-1][X1+1] == 0 && board[Y3+1][X3-1] == 0 && board[Y4+2][X4-2] == 0)
+        else if(board[Y1-1][X1+2] == 0 && board[Y3+1][X3] == 0 && board[Y4+2][X4-1] == 0)
         {
             Y1 = Y1 - 1;
-            X1 = X1 + 1;
-            board[Y1+1][X1-1] = 0;
+            X1 = X1 + 2;
+            board[Y1+1][X1-2] = 0;
+            
+            X2 = X2 + 1;
+            board[Y2][X2-1] = 0;
             
             Y3 = Y3 + 1;
-            X3 = X3 - 1;
-            board[Y3-1][X3+1] = 0;
+            board[Y3-1][X3] = 0;
             
             Y4 = Y4 + 2;
-            X4 = X4 - 2;
-            board[Y4-2][X4+2] = 0;
+            X4 = X4 - 1;
+            board[Y4-2][X4+1] = 0;
             
             ROTATE1 = true;
         }
     }
     
-    else if(ROTATE1)
+    else if(ROTATE1 && !ROTATE2 && !ROTATE3) //piece is in second position (Looking good)
     {
-        if(board[Y1][X1-1] != 0 || board[Y1+1][X1-1] != 0)
+        //check top block in vertical line
+        if(board[Y1][X1+1] != 0 || board[Y1+1][X1+1] != 0 || board[Y1+2][X1+1] != 0)
         {
             return;
         }
         
-        //second block will not change
-        
         //check the third block movement
-        else if(board[Y3][X3+1] != 0 || board[Y3+1][X3+1] != 0)
+        else if(board[Y3][X3-1] != 0)
         {
             return;
         }
         
         //checking fourth block movement
-        else if(board[Y4][X4+1] != 0 || board[Y4][X4+2] != 0 || board[Y4-1][X4+1] != 0 || board[Y4-2][X4+2])
+        else if(board[Y4][X4-1] != 0 || board[Y4][X4-2] != 0 || board[Y4-1][X4-1] != 0 || board[Y4-1][X4-2] != 0)
         {
             return;
         }
         
-        else if(board[Y1+1][X1-1] == 0 && board[Y3-1][X3+1] == 0 && board[Y4-2][X4+2] == 0 && ROTATE1)
+        //board[Y1+1][X1-1] == 0 && board[Y3-1][X3+1] == 0 && board[Y4-2][X4+2] == 0 && ROTATE1
+        else if(board[Y4-1][X4-2] == 0 && board[Y3][X3-1] == 0 && board[Y1+2][X1+1] == 0)
         {
-            Y1 = Y1 + 1;
-            X1 = X1 - 1;
-            board[Y1-1][X1+1] = 0;
+            Y1 = Y1 + 2;
+            X1 = X1 + 1;
+            board[Y1-2][X1-1] = 0;
+            
+            Y2 = Y2 + 1;
+            board[Y2-1][X2] = 0;
+            
+            X3 = X3 - 1;
+            board[Y3][X3+1] = 0;
+            
+            Y4 = Y4 - 1;
+            X4 = X4 - 2;
+            board[Y4+1][X4+2] = 0;
+            
+            ROTATE2 = true;
+        }
+    }
+
+    else if(ROTATE1 && ROTATE2 && !ROTATE3) // piece is in third position
+    {
+        //check top block in vertical line
+        if(board[Y4-1][X4] != 0 || board[Y4-2][X4] != 0 || board[Y4-1][X4-1] != 0 || board[Y4-2][X4-1] != 0)
+        {
+            return;
+        }
+        
+        //check the third block movement
+        else if(board[Y3+1][X3] != 0)
+        {
+            return;
+        }
+        
+        //checking fourth block movement
+        else if(board[Y1+1][X1] != 0 || board[Y1+1][X1-1] != 0 || board[Y1+1][X1-2] != 0)
+        {
+            return;
+        }
+        
+        //board[Y1+1][X1-1] == 0 && board[Y3-1][X3+1] == 0 && board[Y4-2][X4+2] == 0 && ROTATE1
+        else if(board[Y1+1][X1-2] == 0 && board[Y3+1][X3] == 0 && board[Y4-2][X4+1] == 0)
+        {
+            Y4 = Y4 - 2;
+            X4 = X4 + 1;
+            board[Y4+2][X4-1] = 0;
+            
+            X2 = X2 - 1;
+            board[Y2][X2+1] = 0;
             
             Y3 = Y3 - 1;
-            X3 = X3 + 1;
-            board[Y3+1][X3-1] = 0;
+            board[Y3+1][X3] = 0;
             
-            Y4 = Y4 - 2;
+            Y1 = Y1 + 1;
+            X1 = X1 - 2;
+            board[Y1-1][X1+2] = 0;
+
+            ROTATE3 = true;
+        }
+    }
+    
+    else if(ROTATE1 && ROTATE2 && ROTATE3) //piece is in second position
+    {
+        //checking if the first block can move
+        if(board[Y4][X4+1] != 0 || board[Y4][X4+2] != 0 || board[Y4+1][X4+1] != 0 || board[Y4+1][X4+2] != 0)
+        {
+            return;
+        }
+        
+        //check the third block movement
+        else if(board[Y3][X3+1] != 0)
+        {
+            return;
+        }
+        
+        //checking fourth block movement
+        else if(board[Y1][X1-1] != 0 || board[Y1-1][X1-1] != 0 || board[Y1-2][X1-1] != 0)
+        {
+            return;
+        }
+        
+        else if(board[Y4+1][X4+2] == 0 && board[Y3][X3+1] == 0 && board[Y1-2][X1-1] == 0)
+        {
+            Y4 = Y4 + 1;
             X4 = X4 + 2;
-            board[Y4+2][X4-2] = 0;
+            board[Y4-1][X4-2] = 0;
+            
+            Y2 = Y2 - 1;
+            board[Y2+1][X2] = 0;
+            
+            X3 = X3 + 1;
+            board[Y3][X3-1] = 0;
+            
+            Y1 = Y1 - 2;
+            X1 = X1 - 1;
+            board[Y1+2][X1+1] = 0;
             
             ROTATE1 = false;
+            ROTATE2 = false;
+            ROTATE3 = false;
         }
     }
 }
