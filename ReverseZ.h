@@ -72,10 +72,10 @@ void ReverseZ::moveLeft(int board[22][12])
 		if (board[Y1][X1 - 1] == 0 && board[Y3][X3 - 1] == 0)
 		{
 			
-			board[Y1][X1 + 1] = 0;
-			board[Y2][X2 + 1] = 0;
-			board[Y3][X3 + 1] = 0;
-			//board[Y4][X4 + 1] = 0;
+			board[Y1][X1] = 0;
+			board[Y2][X2] = 0;
+			board[Y3][X3] = 0;
+			board[Y4][X4] = 0;
 
 			X1 -= 1;
 			X2 -= 1;
@@ -104,10 +104,10 @@ void ReverseZ::moveLeft(int board[22][12])
 	{
 		if (board[Y2][X2 - 1] == 0 && board[Y4][X4 - 1] == 0)
 		{
-			//board[Y1][X1 + 1] = 0;
-			board[Y2][X2 + 1] = 0;
-			board[Y3][X3 + 1] = 0;
-			board[Y4][X4 + 1] = 0;
+			board[Y1][X1] = 0;
+			board[Y2][X2] = 0;
+			board[Y3][X3] = 0;
+			board[Y4][X4] = 0;
 
 			X1 -= 1;
 			X2 -= 1;
@@ -139,10 +139,10 @@ void ReverseZ::moveRight(int board[22][12])
 	{
 		if (board[Y4][X4 + 1] == 0 && board[Y2][X2 + 1] == 0)
 		{
-			//board[Y1][X1 - 1] = 0;
-			board[Y2][X2 - 1] = 0;
-			board[Y3][X3 - 1] = 0;
-			board[Y4][X4 - 1] = 0;
+			board[Y1][X1] = 0;
+			board[Y2][X2] = 0;
+			board[Y3][X3] = 0;
+			board[Y4][X4] = 0;
 
 			X1 += 1;
 			X2 += 1;
@@ -171,10 +171,10 @@ void ReverseZ::moveRight(int board[22][12])
 	{
 		if (board[Y1][X1 + 1] == 0 && board[Y3][X3 + 1] == 0)
 		{
-			board[Y1][X1 - 1] = 0;
-			board[Y2][X2 - 1] = 0;
-			board[Y3][X3 - 1] = 0;
-			//board[Y4][X4 - 1] = 0;
+			board[Y1][X1] = 0;
+			board[Y2][X2] = 0;
+			board[Y3][X3] = 0;
+			board[Y4][X4] = 0;
 
 			X1 += 1;
 			X2 += 1;
