@@ -90,7 +90,7 @@ void TBlock::moveLeft(int board[22][12]){   //*****COMPLETE, UNTESTED*****
         {
             return;
         }
-        else if(board[Y3][X3-1] != 0){
+        else if(board[Y3][X3-1] != 0){ 
             return;
         }
         
@@ -167,7 +167,7 @@ void TBlock::moveLeft(int board[22][12]){   //*****COMPLETE, UNTESTED*****
         else if(board[Y4][X4-1] != 0){
             return;
         }
-        else if(X1 != 1 && X2 != 1 && X4 != 1 && board[Y1][X1-1] == 0 && board[Y2][X2-1] == 0 && board[Y4][X4-1]){
+        else if(X1 != 1 && X2 != 1 && X4 != 1 && board[Y1][X1-1] == 0 && board[Y2][X2-1] == 0 && board[Y4][X4-1] == 0){
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
             board[Y2][X2] = 0;
@@ -270,7 +270,7 @@ void TBlock::moveRight(int board[22][12]){  //*****COMPLETE, UNTESTED*****
         else if(board[Y4][X4+1] != 0){
             return;
         }
-        else if(X1 != 11 && X3 != 11 && X4 != 11 && board[Y1][X1+1] == 0 && board[Y3][X3+1] == 0 && board[Y4][X4+1]){
+        else if(X1 != 11 && X3 != 11 && X4 != 11 && board[Y1][X1+1] == 0 && board[Y3][X3+1] == 0 && board[Y4][X4+1] == 0){
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
             board[Y2][X2] = 0;
@@ -423,7 +423,7 @@ bool TBlock::moveDown(int board[22][12]){   //*****COMPLETE, UNTESTED*****
         if(board[Y4+1][X4] != 0 || board[Y2+1][X2] != 0 || board[Y1+1][X1] != 0){
             return false;
         }
-        else if(Y4 != 20 && Y2 != 20 && Y1 != 20 && board[Y4+1][X4] == 0 && board[Y2+1][X2] ==0 && board[Y1+1][X1]){
+        else if(Y4 != 20 && Y2 != 20 && Y1 != 20 && board[Y4+1][X4] == 0 && board[Y2+1][X2] ==0 && board[Y1+1][X1] == 0){
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
             board[Y2][X2] = 0;
@@ -649,7 +649,7 @@ void TBlock::rotate(int board[22][12]){ //*****COMPLETE, UNTESTED*****
         
         //Block 3
         Y3 += 1;
-        X3 += 1;
+        X3 -= 1;
         
         //Block 4
         Y4 += 1;
