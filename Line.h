@@ -248,7 +248,7 @@ void Line::moveRight(int board[22][12])
         }
     }
     
-    else if(ROTATE1 && !ROTATE2 && ROTATE3) //position 4
+    else if(ROTATE1 && ROTATE2 && ROTATE3) //position 4
     {
         if(board[Y4][X4+1] != 0 || board[Y3][X3+1] != 0 || board[Y2][X2+1] != 0 || board[Y1][X1+1] != 0)
         {
@@ -274,7 +274,7 @@ void Line::moveRight(int board[22][12])
 
 bool Line::moveDown(int board[22][12])
 {
-    if(!ROTATE1 && !ROTATE3) //if the piece has not rotated
+    if(!ROTATE1 && !ROTATE2 && !ROTATE3) //first position
     {
         if(board[Y1+1][X1] != 0 || board[Y2+1][X2] != 0 || board[Y3+1][X3] != 0 || board[Y4+1][X4] != 0)
         {
@@ -320,7 +320,7 @@ bool Line::moveDown(int board[22][12])
         return true;
     }
     
-    else if(ROTATE1 && !ROTATE3)
+    else if(ROTATE1 && !ROTATE2 && !ROTATE3)
     {
         if(board[Y4+1][X4] != 0 && board[Y4+1][X4] != 8)
         {
@@ -346,7 +346,33 @@ bool Line::moveDown(int board[22][12])
         return true;
     }
     
-    else if(ROTATE1 && ROTATE3)
+    else if(ROTATE1 && ROTATE2 && !ROTATE3) //third position
+    {
+        if(board[Y1+1][X1] != 0 || board[Y2+1][X2] != 0 || board[Y3+1][X3] != 0 || board[Y4+1][X4] != 0)
+        {
+            DROP = false;
+            return false;
+        }
+        
+        else if(Y1 != 20 && board[Y1+1][X1] == 0 && board[Y2+1][X2] == 0 && board[Y3+1][X3] == 0 && board[Y4+1][X4] == 0)
+        {
+            Y1 = Y1 + 1;
+            board[Y1-1][X1] = 0;
+            
+            Y2 = Y2 + 1;
+            board[Y2-1][X2] = 0;
+            
+            Y3 = Y3 + 1;
+            board[Y3-1][X3] = 0;
+            
+            Y4 = Y4 + 1;
+            board[Y4-1][X4] = 0;
+        }
+        
+        return true;
+    }
+    
+    else if(ROTATE1 && ROTATE2 && ROTATE3) //fourth position
     {
         if(board[Y1+1][X1] != 0 && board[Y1+1][X1] != 8)
         {
@@ -395,7 +421,6 @@ void Line::dropSet(int board[22][12]) // not working fully
 
 void Line::rotate(int board[22][12]) // rotates piece to the right 90 degrees
 {
-    //too many checks right now
     if(!ROTATE1 && !ROTATE2 && !ROTATE3) //original piece (This is working)
     {
         //checking if the first block can move
@@ -589,7 +614,7 @@ void Line::ghost(int board[22][12])
         board[Y3+C-1][X3] = 8;
         board[Y4+C-1][X4] = 8;
     }
-     */
+    */
 }
 
 #endif /* Line_h */
