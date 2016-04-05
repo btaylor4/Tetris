@@ -13,7 +13,7 @@
 #include "Border.h"
 #include "Shape.h"
 #define GL_GLEXT_PROTOTYPES
-#include <GLUT/glut.h>
+#include <GL/freeglut.h>
 
 
 class J : public Shape
@@ -31,10 +31,12 @@ public:
 
 private:
     bool DROP;
+	bool MOVE;
     bool POSITION1; //Original position
     bool POSITION2; //Position after one 90 degree clockwise rotation
     bool POSITION3; //Position after two 90 degree clockwise rotations
     bool POSITION4; //Position after three 90 degree clockwise rotations
+	int n = 1;
 
 };
 
@@ -73,6 +75,7 @@ J::J()
     POSITION3 = false;
     POSITION4 = false;
     DROP = true;
+	MOVE = false;
 }
 
 J::~J()
@@ -90,22 +93,12 @@ void J::draw(int board[22][12])
 
 void J::moveLeft(int board[22][12])
 {
+	MOVE = false;
+
   //Move left in Position 1
     if(POSITION1 && !POSITION2 && !POSITION3 && !POSITION4)
     {
-        if(board[Y1][X1-1] != 0)
-        {
-            return;
-        }
-        else if(board[Y3][X3-1] != 0)
-        {
-            return;
-        }
-        else if(board[Y2][X2-1] != 0)
-        {
-            return;
-        }
-        else if(X1 != 1 && board[Y1][X1-1] == 0 && board[Y2][X2-1] == 0 && board[Y3][X3-1] == 0 && board[Y4][X4-1] == 0)
+        if(board[Y1][X1-1] == 0 && board[Y2][X2-1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -123,16 +116,7 @@ void J::moveLeft(int board[22][12])
     //Move left in Position 2
     if(!POSITION1 && POSITION2 && !POSITION3 && !POSITION4)
     {
-        if(board[Y2][X2-1] != 0){
-            return;
-        }
-        else if(board[Y4][X4-1] != 0){
-            return;
-        }
-        else if(board[Y1][X1-1] != 0){
-            return;
-        }
-        else if(X3 != 1 && board[Y2][X2-1] == 0 && board[Y4][X4-1] == 0 && board[Y1][X1-1] == 0)
+        if(board[Y2][X2-1] == 0 && board[Y4][X4-1] == 0 && board[Y3][X3-1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -150,16 +134,7 @@ void J::moveLeft(int board[22][12])
     //Move left in Position 3
     if(!POSITION1 && !POSITION2 && POSITION3 && !POSITION4)
     {
-        if(board[Y1][X1-1] != 0){
-            return;
-        }
-        else if(board[Y3][X3-1] != 0){
-            return;
-        }
-        else if(board[Y4][X4-1] != 0){
-            return;
-        }
-        else if(X4 != 1 && board[Y1][X1-1] == 0 && board[Y3][X3-1] == 0 && board[Y4][X4-1] == 0)
+        if(board[Y4][X4-1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -177,15 +152,7 @@ void J::moveLeft(int board[22][12])
     //Move left in Position 4
     if(!POSITION1 && !POSITION2 && !POSITION3 && POSITION4)
     {
-        if(board[Y1][X1-1] != 0)
-        {
-            return;
-        }
-        else if(board[Y2][X2-1] != 0)
-        {
-            return;
-        }
-        else if(X1 != 1 && X2 != 1 && board[Y1][X1-1] == 0 && board[Y2][X2-1] == 0 && board[Y3][X3-1] == 0 && board[Y4][X4-1] == 0)
+        if(board[Y1][X1-1] == 0 && board[Y3][X3-1] == 0 && board[Y4][X4-1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -207,19 +174,7 @@ void J::moveRight(int board[22][12])
     //Move right in Position 1
     if(POSITION1 && !POSITION2 && !POSITION3 && !POSITION4)
     {
-        if(board[Y4][X4+1] != 0)
-        {
-            return;
-        }
-        else if(board[Y3][X3+1] != 0)
-        {
-            return;
-        }
-        else if(board[Y2][X2+1] != 0)
-        {
-            return;
-        }
-        else if(X4 != 1 && board[Y4][X4+1] == 0 && board[Y3][X3+1] == 0 && board[Y2][X2+1] == 0)
+        if(board[Y1][X1+1] == 0 && board[Y4][X4+1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -237,15 +192,7 @@ void J::moveRight(int board[22][12])
     //Move right in Position 2
     if(!POSITION1 && POSITION2 && !POSITION3 && !POSITION4)
     {
-        if(board[Y1][X1+1] != 0)
-        {
-            return;
-        }
-        else if(board[Y4][X4+1] != 0)
-        {
-            return;
-        }
-        else if(X1 != 1 && X4 != 1 && board[Y1][X1+1] == 0 && board[Y4][X4+1] == 0)
+        if(board[Y1][X1+1] == 0 && board[Y3][X3 + 1] == 0 && board[Y4][X4+1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -263,15 +210,7 @@ void J::moveRight(int board[22][12])
     //Move right in Position 3
     if(!POSITION1 && !POSITION2 && POSITION3 && !POSITION4)
     {
-        if(board[Y2][X2+1] != 0)
-        {
-            return;
-        }
-        else if(board[Y1][X1+1] != 0)
-        {
-            return;
-        }
-        else if(X1 != 1 && board[Y2][X2+1] == 0 && board[Y1][X1+1] == 0 && board[Y3][X3+1] == 0 && board[Y4][X4+1] == 0)
+        if(board[Y1][X1+1] == 0 && board[Y2][X2+1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -286,26 +225,10 @@ void J::moveRight(int board[22][12])
         }
     }
 
-    //Move left in Position 4
+    //Move right in Position 4
     if(!POSITION1 && !POSITION2 && !POSITION3 && POSITION4)
     {
-        if(board[Y1][X1+1] != 0)
-        {
-            return;
-        }
-        else if(board[Y3][X3+1] != 0)
-        {
-            return;
-        }
-        else if(board[Y2][X2+1] != 0)
-        {
-            return;
-        }
-        else if(board[Y4][X4+1] != 0)
-        {
-            return;
-        }
-        else if(X1 != 1 && X3 != 1 && X2 != 1 && board[Y1][X1+1] == 0 && board[Y3][X3+1] == 0 && board[Y2][X2+1] == 0 && board[Y4][X4+1] == 0)
+        if(board[Y2][X2+1] == 0 && board[Y3][X3+1] == 0 && board[Y4][X4+1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -330,19 +253,6 @@ bool J::moveDown(int board[22][12])
         {
             return false;
         }
-        else if(Y3 != 1 && board[Y2+1][X2] == 0 && board[Y3+1][X3] == 0 && board[Y4+1][X4] == 0)
-        {
-            //Remove blocks from their previous locations
-            board[Y1][X1] = 0;
-            board[Y2][X2] = 0;
-            board[Y3][X3] = 0;
-            board[Y4][X4] = 0;
-
-            Y1 += 1;
-            Y2 += 1;
-            Y3 += 1;
-            Y4 += 1;
-        }
     }
     //Move down in Position 2
     else if(POSITION2)
@@ -350,19 +260,6 @@ bool J::moveDown(int board[22][12])
         if(board[Y4+1][X4] != 0 || board[Y1+1][X1] != 0)
         {
             return false;
-        }
-        else if(Y4 != 20 && board[Y1+1][X1] == 0 && board[Y4+1][X4] == 0)
-        {
-            //Remove blocks from their previous locations
-            board[Y1][X1] = 0;
-            board[Y2][X2] = 0;
-            board[Y3][X3] = 0;
-            board[Y4][X4] = 0;
-
-            Y1 += 1;
-            Y2 += 1;
-            Y3 += 1;
-            Y4 += 1;
         }
     }
     //Move down in Position 3
@@ -372,19 +269,6 @@ bool J::moveDown(int board[22][12])
         {
             return false;
         }
-        else if(Y1 != 20 && board[Y4+1][X4] == 0 && board[Y1+1][X1] == 0 && board[Y3+1][X3] == 0)
-        {
-            //Remove blocks from their previous locations
-            board[Y1][X1] = 0;
-            board[Y2][X2] = 0;
-            board[Y3][X3] = 0;
-            board[Y4][X4] = 0;
-
-            Y1 += 1;
-            Y2 += 1;
-            Y3 += 1;
-            Y4 += 1;
-        }
     }
     //Move down in Position 4
     else if(POSITION4)
@@ -393,21 +277,17 @@ bool J::moveDown(int board[22][12])
         {
             return false;
         }
-        else if(Y1 != 20 && board[Y1+1][X1] == 0 && board[Y2+1][X2] == 0)
-        {
-            //Remove blocks from their previous locations
-            board[Y1][X1] = 0;
-            board[Y2][X2] = 0;
-            board[Y3][X3] = 0;
-            board[Y4][X4] = 0;
-
-            Y1 += 1;
-            Y2 += 1;
-            Y3 += 1;
-            Y4 += 1;
-        }
     }
 
+	board[Y1][X1] = 0;
+	board[Y2][X2] = 0;
+	board[Y3][X3] = 0;
+	board[Y4][X4] = 0;
+
+	Y1 += 1;
+	Y2 += 1;
+	Y3 += 1;
+	Y4 += 1;
     return true;
 }
 
@@ -425,7 +305,7 @@ void J::dropSet(int board[22][12])
         board[Y3][X3] = 0;
         board[Y4][X4] = 0;
 
-        while(board[Y1 + n][X1] == 0 && board[Y2 + n][X2] == 0 && board[Y4 + n][X4] == 0)
+        while(board[Y3 + n][X3] == 0 && board[Y2 + n][X2] == 0 && board[Y4 + n][X4] == 0)
         {
             n++;
         }
@@ -516,7 +396,7 @@ void J::dropSet(int board[22][12])
 //Rotates the block
 void J::rotate(int board[22][12])
 {
-    if(POSITION1 && !POSITION2 && !POSITION3 && !POSITION4)
+    if(POSITION1)
     {
         /*This block's rotations happen on the 3rd block, so there are no movements for
             the 3rd block on rotations*/
@@ -536,7 +416,7 @@ void J::rotate(int board[22][12])
         }
 
         //Check projected rotation path for 4th block
-        else if(board[Y4+1][X4-1] != 0)
+        else if(board[Y4+1][X4-1] != 0 || board[Y4 + 1][X4] != 0)
         {
             return;
         }
@@ -564,10 +444,10 @@ void J::rotate(int board[22][12])
         POSITION2 = true; //Lets program know that the block is in the 2nd position
     }
 
-    else if(!POSITION1 && POSITION2 && !POSITION3 && !POSITION4)
+    else if(POSITION2)
     {
         //Check projected rotation for 1st block
-        if(board[Y1+1][X1] != 0 || board[Y1+2][X1] != 0)
+        if(board[Y1+2][X1] != 0)
         {
             return;
         }
@@ -607,22 +487,22 @@ void J::rotate(int board[22][12])
         POSITION3 = true;
     }
 
-    else if(!POSITION1 && !POSITION2 && POSITION3 &&!POSITION4)
+    else if(POSITION3)
     {
         //Check projected rotation for 1st block
-        if(board[Y1][X1-1] != 0 || board[Y1][X1-2] != 0)
+        if(board[Y1][X1-2] != 0)
         {
             return;
         }
 
         //Check projected rotation for 3rd block
-        else if(board[Y2-1][X2-1] != 0)
+        else if(board[Y2+1][X2-1] != 0)
         {
             return;
         }
 
         //Chekc projected rotation for 4th block
-        else if(board[Y4+1][X4] != 0 || board[Y4+1][X4+1] != 0)
+        else if(board[Y4-1][X4] != 0 || board[Y4-1][X4+1] != 0)
         {
             return;
         }
@@ -637,27 +517,23 @@ void J::rotate(int board[22][12])
         X1 -= 2;
 
         //Block 2
-        Y2 -= 1;
+        Y2 += 1;
         X2 -= 1;
 
         //Block 3 stays in place
 
         //Block 4
-        Y4 += 1;
+        Y4 -= 1;
         X4 += 1;
 
         POSITION3 = false;
         POSITION4 = true; //Lets the program know that the block is in the 4th position
     }
 
-    else if(!POSITION1 && !POSITION2 && !POSITION3 && POSITION4)
+    else if(POSITION4)
     {
-                                                                  /*          /4/
-                                                                            /2/ /3/
-                                                                            /1/     */
-
         //Check projected rotation for 1st block
-        if(board[Y1-1][X1] != 0 || board[Y1-2][X1] != 0)
+        if(board[Y1-2][X1] != 0)
         {
             return;
         }
