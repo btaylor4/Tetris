@@ -23,26 +23,29 @@
 #include "Square.h"
 #include "Line.h"
 #include "Border.h"
+#include "zBlock.h"
+#include "J.h"
+#include "ReverseZ.h"
+#include "TBlock.h"
 
 using namespace std;
 
-Shape *x;
-Square cube;
-Line line;
 //Mix_Music *song = NULL;
-static int speed = 1000;
+Shape *x;
+
+static int speed = 800;
 static int partsCreated = 0;
 static bool change = false;
+static int randChoice = 0;
+static int score = 0;
 
 Shape *generatePart(int board[22][12]);
-bool checkLose(string type, int array[22][12]);
-bool init();
 void draw();
-void fallTimer(int a);
 void Timer(int a);
 void print(int array[22][12]);
 void boardDraw();
 void keys(int key, int w, int y);
+void clearLines(int board[22][12]);
 
 int board[22][12] =
 {
