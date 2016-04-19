@@ -50,6 +50,7 @@ static int level = 1;
 static int totalLines = 0;
 bool playing = false;
 bool lose = false;
+bool menu = false;
 
 Shape *generatePart(int board[22][12]);
 Shape *nextPart(int nextBoard[5][5]);

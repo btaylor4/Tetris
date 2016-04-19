@@ -223,6 +223,7 @@ void menuKeys(int key, int w, int y)
     if(key == 127 && !lose) //delete key
     {
         drawMenu();
+        menu = false;
     }
     
     if(key == 27)
@@ -1261,7 +1262,7 @@ void draw()
 
 void pass(int x, int y)
 {
-    if(!playing)
+    if(!playing && !menu)
     {
         glClear(GL_COLOR_BUFFER_BIT);
         glMatrixMode(GL_PROJECTION);
@@ -1973,6 +1974,7 @@ void button(int button, int state, int x, int y)
             //show highscore
             else if(y <= 330 && y >= 280 && x >=301 && x <= 483)
             {
+                menu = true;
                 player.displayScores();
                 glutSpecialFunc(menuKeys);
             }
@@ -1980,6 +1982,7 @@ void button(int button, int state, int x, int y)
             //show help
             else if(y <= 390 && y >= 345 && x >=301 && x <= 483)
             {
+                menu = true;
                 drawHelp();
                 glutSpecialFunc(menuKeys);
             }
@@ -2032,6 +2035,7 @@ int main(int argc, char * argv[])
     glutReshapeFunc(reshape);
     glutDisplayFunc(drawMenu);
     glutMouseFunc(button);
+    
     glutPassiveMotionFunc(pass);
     glutMainLoop();
 
