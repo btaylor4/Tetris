@@ -245,6 +245,7 @@ void Timer(int a)
                 player.importFile();
                 drawLose();
                 lose = true;
+                glutSpecialFunc(menuKeys);
                 return;
             }
             
@@ -265,6 +266,7 @@ void Timer(int a)
                 player.importFile();
                 drawLose();
                 lose = true;
+                glutSpecialFunc(menuKeys);
                 return;
             }
             
@@ -1940,57 +1942,60 @@ void pass(int x, int y)
 //mouse click events
 void button(int button, int state, int x, int y)
 {
-    if(button == GLUT_RIGHT_BUTTON || button == GLUT_LEFT_BUTTON)
+    if(!playing)
     {
-        if(state == GLUT_UP)
+        if(button == GLUT_RIGHT_BUTTON || button == GLUT_LEFT_BUTTON)
         {
-            if(y <= 265 && y >= 220 && x >=301 && x <= 483 && !playing) //&& !playing
+            if(state == GLUT_UP)
             {
-                //only do music if on mac
-                #ifndef _WIN32
-                SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO );
-                
-                //initalize Mixer API
-                Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 2048 );
-                
-                //This will not work for people not using my folder
-                //make sure you change the path if you are using a differnet system and folder
-                song = Mix_LoadMUS( "/Users/Bryan/Desktop/College/Computer Engineering /All Programmin'/C++ COP 3503/Tetris-Master/Tetris-Master/beat.mp3" );
-                
-                if( Mix_PlayingMusic() == 0 )
+                if(y <= 265 && y >= 220 && x >=301 && x <= 483 && !playing) //&& !playing
                 {
-                    //Play the music
-                    Mix_PlayMusic(song, -1);
+                    //only do music if on mac
+#ifndef _WIN32
+                    SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO );
+                    
+                    //initalize Mixer API
+                    Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 2048 );
+                    
+                    //This will not work for people not using my folder
+                    //make sure you change the path if you are using a differnet system and folder
+                    song = Mix_LoadMUS( "/Users/Bryan/Desktop/College/Computer Engineering /All Programmin'/C++ COP 3503/Tetris-Master/Tetris-Master/beat.mp3" );
+                    
+                    if( Mix_PlayingMusic() == 0 )
+                    {
+                        //Play the music
+                        Mix_PlayMusic(song, -1);
+                    }
+#endif
+                    
+                    //play game
+                    playing = true;
+                    
+                    //Play Game
+                    Timer(0);
                 }
-                #endif
                 
-                //play game
-                playing = true;
+                //show highscore
+                else if(y <= 330 && y >= 280 && x >=301 && x <= 483)
+                {
+                    menu = true;
+                    player.displayScores();
+                    glutSpecialFunc(menuKeys);
+                }
                 
-                //Play Game
-                Timer(0);
-            }
-            
-            //show highscore
-            else if(y <= 330 && y >= 280 && x >=301 && x <= 483)
-            {
-                menu = true;
-                player.displayScores();
-                glutSpecialFunc(menuKeys);
-            }
-            
-            //show help
-            else if(y <= 390 && y >= 345 && x >=301 && x <= 483)
-            {
-                menu = true;
-                drawHelp();
-                glutSpecialFunc(menuKeys);
-            }
-            
-            //exit the game
-            else if(y <= 470 && y >= 400 && x >=301 && x <= 483)
-            {
-                exit(0);
+                //show help
+                else if(y <= 390 && y >= 345 && x >=301 && x <= 483)
+                {
+                    menu = true;
+                    drawHelp();
+                    glutSpecialFunc(menuKeys);
+                }
+                
+                //exit the game
+                else if(y <= 470 && y >= 400 && x >=301 && x <= 483)
+                {
+                    exit(0);
+                }
             }
         }
     }
