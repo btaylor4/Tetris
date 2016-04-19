@@ -5,16 +5,11 @@
 //  Created by Mark Rattray on 3/15/16.
 //  Copyright © 2016 mrattray. All rights reserved.
 //
-#define _DEBUG
+//#define _DEBUG
 #ifndef Lblock_h
 #define Lblock_h
 
-//#include "main.h"
-//#include "Border.h"
 #include "Shape.h"
-//#define GL_GLEXT_PROTOTYPES
-//#include <GL/freeglut.h>
-
 
 class Lblock : public Shape
 {
@@ -31,7 +26,7 @@ public:
     
 private:
     bool DROP;
-    bool MOVE;
+    bool GEN;
     bool POSITION1; //Original position
     bool POSITION2; //Position after one 90 degree clockwise rotation
     bool POSITION3; //Position after two 90 degree clockwise rotations
@@ -42,10 +37,9 @@ private:
 
 Lblock::Lblock()
 {
-    
     //These are for horizontal piece
-    X1 = 7;
     Y1 = 1;
+    X1 = 5;
     
     X2 = 5;
     Y2 = 2;
@@ -56,14 +50,11 @@ Lblock::Lblock()
     X4 = 7;
     Y4 = 2;
     
-    
-    
     POSITION1 = true;
     POSITION2 = false;
     POSITION3 = false;
     POSITION4 = false;
     DROP = true;
-    MOVE = false;
 }
 
 Lblock::~Lblock()
@@ -73,15 +64,27 @@ Lblock::~Lblock()
 
 void Lblock::draw(int board[22][12])
 {
-    board[Y1][X1] = 5;
-    board[Y2][X2] = 5;
-    board[Y3][X3] = 5;
-    board[Y4][X4] = 5;
+    if(!GEN && (board[Y1][X1] != 0 || board[Y2][X2] != 0 || board[Y3][X3] != 0 || board[Y4][X4] != 0))
+    {
+        X1 = -1;
+    }
+    
+    else
+    {
+        board[Y1][X1] = 5;
+        board[Y2][X2] = 5;
+        board[Y3][X3] = 5;
+        board[Y4][X4] = 5;
+        GEN = true;
+    }
 }
 
 void Lblock::moveLeft(int board[22][12])
 {
-    MOVE = false;
+    if(!DROP)
+    {
+        return;
+    }
     
     //Move left in Position 1
     if(POSITION1 && !POSITION2 && !POSITION3 && !POSITION4)
@@ -140,7 +143,7 @@ void Lblock::moveLeft(int board[22][12])
     //Move left in Position 4
     if(!POSITION1 && !POSITION2 && !POSITION3 && POSITION4)
     {
-        if(board[Y1][X1-1] == 0 && board[Y3][X3-1] == 0 && board[Y2][X2-1] == 0)
+        if(board[Y1][X1-1] == 0 && board[Y3][X3-1] == 0 && board[Y1][X1-1] == 0) //if(board[Y1][X1-1] == 0 && board[Y3][X3-1] == 0 && board[Y2][X2-1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -159,6 +162,11 @@ void Lblock::moveLeft(int board[22][12])
 //Moves the block to the right
 void Lblock::moveRight(int board[22][12])
 {
+    if(!DROP)
+    {
+        return;
+    }
+    
     //Move right in Position 1
     if(POSITION1 && !POSITION2 && !POSITION3 && !POSITION4)
     {
@@ -180,7 +188,7 @@ void Lblock::moveRight(int board[22][12])
     //Move right in Position 2
     if(!POSITION1 && POSITION2 && !POSITION3 && !POSITION4)
     {
-        if(board[Y1][X1+1] == 0 && board[Y3][X3 + 1] == 0 && board[Y2][X2+1] == 0)
+        if(board[Y1][X1+1] == 0 && board[Y3][X3 + 1] == 0 && board[Y4][X4+1] == 0) //if(board[Y1][X1+1] == 0 && board[Y3][X3 + 1] == 0 && board[Y2][X2+1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -235,13 +243,16 @@ void Lblock::moveRight(int board[22][12])
 //Moves the block down
 bool Lblock::moveDown(int board[22][12])
 {
+    if(!DROP)
+    {
+        return false;
+    }
+    
     //Move down in Position 1
-    if(POSITION1){
+    if(POSITION1)
+    {
         if(board[Y2+1][X2] != 0 || board[Y3+1][X3] != 0 || board[Y4+1][X4] != 0)
         {
-#ifdef _DEBUG
-            printf("moveDown Pos 1: %d returning false\n", __LINE__);
-#endif
             return false;
         }
     }
@@ -250,22 +261,14 @@ bool Lblock::moveDown(int board[22][12])
     {
         if(board[Y4+1][X4] != 0 || board[Y1+1][X1] != 0)
         {
-#ifdef _DEBUG
-            printf("moveDown Pos 2: %d returning false\n", __LINE__);
-           // printf("The current values[Y4][X4]: %d %d \nThe Next set of values %d %d: ", Y4, X4, (Y4+1), X4);
-            
-#endif
             return false;
         }
     }
     //Move down in Position 3
     else if(POSITION3)
     {
-        if(board[Y2+1][X2] != 0 || board[Y1+1][X1] != 0 || board[Y3+1][X3] != 0)
+        if(board[Y4+1][X4] != 0 || board[Y1+1][X1] != 0 || board[Y3+1][X3] != 0) //if(board[Y2+1][X2] != 0 || board[Y1+1][X1] != 0 || board[Y3+1][X3] != 0)
         {
-#ifdef _DEBUG
-            printf("moveDown Pos 3: %d returning false\n", __LINE__);
-#endif
             return false;
         }
     }
@@ -274,10 +277,6 @@ bool Lblock::moveDown(int board[22][12])
     {
         if(board[Y1+1][X1] != 0 || board[Y2+1][X2] != 0)
         {
-
-#ifdef _DEBUG
-            printf("moveDown Pos 4: %d returning false\n", __LINE__);
-#endif
             return false;
         }
     }
@@ -399,6 +398,11 @@ void Lblock::dropSet(int board[22][12])
 //Rotates the block
 void Lblock::rotate(int board[22][12])
 {
+    if(!DROP)
+    {
+        return;
+    }
+    
     if(POSITION1)
     {
         /*This block's rotations happen on the 3rd block, so there are no movements for
@@ -407,7 +411,7 @@ void Lblock::rotate(int board[22][12])
         //Initial series of checks make sure no blocks are occupying the area it will rotate into
         
         //Check proLblockected rotation path for 1st block
-        if(board[Y1+2][X1] != 0)
+        if(board[Y1][X1+2] != 0) //if(board[Y1+2][X1] != 0)
         {
             return;
         }
@@ -431,15 +435,14 @@ void Lblock::rotate(int board[22][12])
         board[Y4][X4] = 0;
         
         //Block 1
-        Y1 += 2;
-        //X2 += 1;
+        //Y1 += 2;//wrong
+        X1 += 2;
         
         //Block 2
         Y2 -= 1;
         X2 += 1;
         
         //Block 3 (Y3, X3) stays in place
-        
         
         //Block 4
         Y4 += 1;
@@ -476,8 +479,8 @@ void Lblock::rotate(int board[22][12])
         board[Y4][X4] = 0;
         
         //Block 1
-        X1 -= 2;
-       // Y1 -= 2;
+        //X1 -= 2; // wrong
+        Y1 += 2;
         
         //Block 2
         Y2 += 1;
@@ -520,8 +523,8 @@ void Lblock::rotate(int board[22][12])
         board[Y4][X4] = 0;
         
         //Block 1
-        //X1 -= 2;
-        Y1 -= 2;
+        X1 -= 2;
+        //Y1 -= 2; wrong
         
         //Block 2
         Y2 += 1;
@@ -564,8 +567,8 @@ void Lblock::rotate(int board[22][12])
         board[Y4][X4] = 0;
         
         //Block 1
-        //Y1 += 1;
-        X1 +=2;
+        Y1 -= 2;
+        //X1 +=2; wrong
         
         //Block 2
         Y2 -= 1;

@@ -17,6 +17,7 @@ public:
     virtual void moveLeft(int board[22][12]){}
     virtual void moveRight(int board[22][12]){}
     virtual void dropSet(int board[22][12]){}
+    virtual void ghost(int board[22][12]){}
     virtual bool moveDown(int board[22][12]){return true;}
 
     //Coordinates
@@ -33,7 +34,7 @@ public:
     int Y4;
     
     bool DROP;
-    bool ROTATE1;
+    bool GEN;
 };
 
 #endif /* Shape_h */

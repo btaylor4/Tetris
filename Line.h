@@ -12,7 +12,6 @@
 
 #include "Shape.h"
 
-
 class Line : public Shape
 {
 public:
@@ -418,6 +417,53 @@ void Line::dropSet(int board[22][12]) // not working fully
     board[Y2][X2] = 0;
     board[Y3][X3] = 0;
     board[Y4][X4] = 0;
+    
+    /*
+     //checks for if the ghost method
+    if(!ROTATE1 && !ROTATE2 && !ROTATE3) //first position
+    {
+        while((board[Y1+1][X1] == 0 && board[Y4+1][X4] == 0 && board[Y2+1][X2] == 0 && board[Y3+1][X3] == 0) || (board[Y1+1][X1] == 8 && board[Y4+1][X4] == 8 && board[Y2+1][X2] == 8 && board[Y3+1][X3] == 8))
+        {
+            Y1++;
+            Y2++;
+            Y3++;
+            Y4++;
+        }
+    }
+    
+    else if(ROTATE1 && !ROTATE2 && !ROTATE3)
+    {
+        while(board[Y4+1][X4] == 0 || board[Y4+1][X4] == 8)
+        {
+            Y1++;
+            Y2++;
+            Y3++;
+            Y4++;
+        }
+    }
+    
+    else if(ROTATE1 && ROTATE2 && !ROTATE3) //third position
+    {
+        while((board[Y1+1][X1] == 0 && board[Y4+1][X4] == 0 && board[Y2+1][X2] == 0 && board[Y3+1][X3] == 0) || (board[Y1+1][X1] == 8 && board[Y4+1][X4] == 8 && board[Y2+1][X2] == 8 && board[Y3+1][X3] == 8))
+        {
+            Y1++;
+            Y2++;
+            Y3++;
+            Y4++;
+        }
+    }
+    
+    else if(ROTATE1 && ROTATE2 && ROTATE3) //fourth position
+    {
+        while(board[Y1+1][X1] == 0 || board[Y1+1][X1] == 8)
+        {
+            Y1++;
+            Y2++;
+            Y3++;
+            Y4++;
+        }
+    }
+     */
     
     while(board[Y1+1][X1] == 0 && board[Y4+1][X4] == 0 && board[Y2+1][X2] == 0 && board[Y3+1][X3] == 0)
     {
