@@ -566,7 +566,6 @@ Shape *nextPart(int nextBoard[5][5])
             break;
             
         case 5:
-            //generate Reverse L-Block
             nextP = new J();
             
             for(int i = 0; i < 5; i++)
@@ -577,10 +576,10 @@ Shape *nextPart(int nextBoard[5][5])
                 }
             }
             
-            nextBoard[1][3] = 6;
-            nextBoard[2][3] = 6;
-            nextBoard[2][2] = 6;
-            nextBoard[2][1] = 6;
+            nextBoard[1][3] = 5;
+            nextBoard[2][3] = 5;
+            nextBoard[2][2] = 5;
+            nextBoard[2][1] = 5;
             
             return nextP;
             break;
@@ -597,10 +596,10 @@ Shape *nextPart(int nextBoard[5][5])
                 }
             }
             
-            nextBoard[1][0] = 5;
-            nextBoard[2][0] = 5;
-            nextBoard[2][1] = 5;
-            nextBoard[2][2] = 5;
+            nextBoard[1][0] = 6;
+            nextBoard[2][0] = 6;
+            nextBoard[2][1] = 6;
+            nextBoard[2][2] = 6;
             
             return nextP;
             break;
@@ -1957,8 +1956,7 @@ void button(int button, int state, int x, int y)
                     //initalize Mixer API
                     Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 2048 );
                     
-                    //This will not work for people not using my folder
-                    //make sure you change the path if you are using a differnet system and folder
+                    //Song is not originally mine: https://www.youtube.com/watch?v=E8FQBjVlERk
                     song = Mix_LoadMUS( "/Users/Bryan/Desktop/College/Computer Engineering /All Programmin'/C++ COP 3503/Tetris-Master/Tetris-Master/beat.mp3" );
                     
                     if( Mix_PlayingMusic() == 0 )

@@ -1,11 +1,11 @@
 //
 //  Lblock.h
-//  Tetris
+//  Function Pointers
 //
-//  Created by Mark Rattray on 3/15/16.
-//  Copyright © 2016 mrattray. All rights reserved.
+//  Created by Bethany Willis on 3/20/16.
+//  Copyright © 2016 Bethany Willis. All rights reserved.
 //
-//#define _DEBUG
+
 #ifndef Lblock_h
 #define Lblock_h
 
@@ -26,11 +26,11 @@ public:
     
 private:
     bool DROP;
-    bool GEN;
     bool POSITION1; //Original position
     bool POSITION2; //Position after one 90 degree clockwise rotation
     bool POSITION3; //Position after two 90 degree clockwise rotations
     bool POSITION4; //Position after three 90 degree clockwise rotations
+    bool GEN;
     int n = 1;
     
 };
@@ -38,8 +38,8 @@ private:
 Lblock::Lblock()
 {
     //These are for horizontal piece
-    Y1 = 1;
     X1 = 5;
+    Y1 = 1;
     
     X2 = 5;
     Y2 = 2;
@@ -54,7 +54,8 @@ Lblock::Lblock()
     POSITION2 = false;
     POSITION3 = false;
     POSITION4 = false;
-    DROP = true;
+    DROP = false;
+    GEN = false;
 }
 
 Lblock::~Lblock()
@@ -71,17 +72,17 @@ void Lblock::draw(int board[22][12])
     
     else
     {
-        board[Y1][X1] = 5;
-        board[Y2][X2] = 5;
-        board[Y3][X3] = 5;
-        board[Y4][X4] = 5;
+        board[Y1][X1] = 6;
+        board[Y2][X2] = 6;
+        board[Y3][X3] = 6;
+        board[Y4][X4] = 6;
         GEN = true;
     }
 }
 
 void Lblock::moveLeft(int board[22][12])
 {
-    if(!DROP)
+    if(DROP)
     {
         return;
     }
@@ -125,7 +126,7 @@ void Lblock::moveLeft(int board[22][12])
     //Move left in Position 3
     if(!POSITION1 && !POSITION2 && POSITION3 && !POSITION4)
     {
-        if(board[Y4][X4-1] == 0 && board[Y1][X1-1] ==0)
+        if(board[Y4][X4-1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -143,7 +144,7 @@ void Lblock::moveLeft(int board[22][12])
     //Move left in Position 4
     if(!POSITION1 && !POSITION2 && !POSITION3 && POSITION4)
     {
-        if(board[Y1][X1-1] == 0 && board[Y3][X3-1] == 0 && board[Y1][X1-1] == 0) //if(board[Y1][X1-1] == 0 && board[Y3][X3-1] == 0 && board[Y2][X2-1] == 0)
+        if(board[Y1][X1-1] == 0 && board[Y3][X3-1] == 0 && board[Y4][X4-1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -162,7 +163,7 @@ void Lblock::moveLeft(int board[22][12])
 //Moves the block to the right
 void Lblock::moveRight(int board[22][12])
 {
-    if(!DROP)
+    if(DROP)
     {
         return;
     }
@@ -188,7 +189,7 @@ void Lblock::moveRight(int board[22][12])
     //Move right in Position 2
     if(!POSITION1 && POSITION2 && !POSITION3 && !POSITION4)
     {
-        if(board[Y1][X1+1] == 0 && board[Y3][X3 + 1] == 0 && board[Y4][X4+1] == 0) //if(board[Y1][X1+1] == 0 && board[Y3][X3 + 1] == 0 && board[Y2][X2+1] == 0)
+        if(board[Y1][X1+1] == 0 && board[Y3][X3 + 1] == 0 && board[Y4][X4+1] == 0)
         {
             //Remove blocks from their previous locations
             board[Y1][X1] = 0;
@@ -243,7 +244,7 @@ void Lblock::moveRight(int board[22][12])
 //Moves the block down
 bool Lblock::moveDown(int board[22][12])
 {
-    if(!DROP)
+    if(DROP)
     {
         return false;
     }
@@ -267,7 +268,7 @@ bool Lblock::moveDown(int board[22][12])
     //Move down in Position 3
     else if(POSITION3)
     {
-        if(board[Y4+1][X4] != 0 || board[Y1+1][X1] != 0 || board[Y3+1][X3] != 0) //if(board[Y2+1][X2] != 0 || board[Y1+1][X1] != 0 || board[Y3+1][X3] != 0)
+        if(board[Y4+1][X4] != 0 || board[Y1+1][X1] != 0 || board[Y3+1][X3] != 0)
         {
             return false;
         }
@@ -319,7 +320,7 @@ void Lblock::dropSet(int board[22][12])
         Y4 += n - 1;
         
         //Stop the block from dropping
-        DROP = false;
+        DROP = true;
     }
     
     //Drop and set into place in Position 2
@@ -343,7 +344,7 @@ void Lblock::dropSet(int board[22][12])
         Y4 += n - 1;
         
         //Stop the block from dropping
-        DROP = false;
+        DROP = true;
     }
     
     //Drop and set into place in Position 3
@@ -367,7 +368,7 @@ void Lblock::dropSet(int board[22][12])
         Y4 += n - 1;
         
         //Stop the block from dropping
-        DROP = false;
+        DROP = true;
     }
     
     //Drop and set into place in Position 4
@@ -391,14 +392,14 @@ void Lblock::dropSet(int board[22][12])
         Y4 += n - 1;
         
         //Stop the block from dropping
-        DROP = false;
+        DROP = true;
     }
 }
 
 //Rotates the block
 void Lblock::rotate(int board[22][12])
 {
-    if(!DROP)
+    if(DROP)
     {
         return;
     }
@@ -410,20 +411,20 @@ void Lblock::rotate(int board[22][12])
         
         //Initial series of checks make sure no blocks are occupying the area it will rotate into
         
-        //Check proLblockected rotation path for 1st block
-        if(board[Y1][X1+2] != 0) //if(board[Y1+2][X1] != 0)
+        //Check projected rotation path for 1st block
+        if(board[Y1][X1+2] != 0)
         {
             return;
         }
         
-        //Check proLblockected rotation path for 2nd block
+        //Check projected rotation path for 3rd block
         else if(board[Y2-1][X2+1] !=0)
         {
             return;
         }
         
-        //Check proLblockected rotation path for 4th block
-        else if(board[Y4+1][X4-1] != 0) // || board[Y4 + 1][X4] != 0)
+        //Check projected rotation path for 4th block
+        else if(board[Y4+1][X4-1] != 0 || board[Y4 + 1][X4] != 0)
         {
             return;
         }
@@ -435,7 +436,6 @@ void Lblock::rotate(int board[22][12])
         board[Y4][X4] = 0;
         
         //Block 1
-        //Y1 += 2;//wrong
         X1 += 2;
         
         //Block 2
@@ -454,19 +454,19 @@ void Lblock::rotate(int board[22][12])
     
     else if(POSITION2)
     {
-        //Check proLblockected rotation for 1st block
+        //Check projected rotation for 1st block
         if(board[Y1+2][X1] != 0)
         {
             return;
         }
         
-        //Check proLblockected rotation for 2nd block
+        //Check projected rotation for 2nd block
         else if(board[Y2-1][X2+1] != 0)
         {
             return;
         }
         
-        //Check proLblockected rotation for 4th block
+        //Check projected rotation for 4th block
         else if(board[Y4][X4-1] != 0 || board[Y1-1][X1-1] != 0)
         {
             return;
@@ -479,7 +479,6 @@ void Lblock::rotate(int board[22][12])
         board[Y4][X4] = 0;
         
         //Block 1
-        //X1 -= 2; // wrong
         Y1 += 2;
         
         //Block 2
@@ -498,19 +497,19 @@ void Lblock::rotate(int board[22][12])
     
     else if(POSITION3)
     {
-        //Check proLblockected rotation for 1st block
+        //Check projected rotation for 1st block
         if(board[Y1][X1-2] != 0)
         {
             return;
         }
         
-        //Check proLblockected rotation for 3rd block
+        //Check projected rotation for 3rd block
         else if(board[Y2+1][X2-1] != 0)
         {
             return;
         }
         
-        //Chekc proLblockected rotation for 4th block
+        //Chekc projected rotation for 4th block
         else if(board[Y4-1][X4] != 0 || board[Y4-1][X4+1] != 0)
         {
             return;
@@ -524,7 +523,6 @@ void Lblock::rotate(int board[22][12])
         
         //Block 1
         X1 -= 2;
-        //Y1 -= 2; wrong
         
         //Block 2
         Y2 += 1;
@@ -542,7 +540,7 @@ void Lblock::rotate(int board[22][12])
     
     else if(POSITION4)
     {
-        //Check proLblockected rotation for 1st block
+        //Check projected rotation for 1st block
         if(board[Y1-2][X1] != 0)
         {
             return;
@@ -568,7 +566,6 @@ void Lblock::rotate(int board[22][12])
         
         //Block 1
         Y1 -= 2;
-        //X1 +=2; wrong
         
         //Block 2
         Y2 -= 1;
