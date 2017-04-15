@@ -9,17 +9,28 @@
 #ifndef Border_h
 #define Border_h
 
+#ifndef _WIN32
 #define GL_GLEXT_PROTOTYPES
 #include <GLUT/glut.h>
 
+#else
+#include <GLUT/freeflut.h>
+#endif
+
+using namespace std;
+
 void drawBorder()
 {
-    glClear( GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_MODELVIEW);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glPushMatrix();
     glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);
     
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     //left border
     glBegin(GL_POLYGON);
     glColor3f(0.63, .63, .63); //grayish color
@@ -56,4 +67,5 @@ void drawBorder()
     glVertex3f(4.85, 0, 0.0); // bottom right corner
     glEnd();
 }
+
 #endif /* Border_h */

@@ -1,5 +1,5 @@
-Eric 500
-Rahul 400
-Chris 300
-Bryan 200
-Trey 100
+BT: 6300
+ME: 1800
+PAUL: 800
+DON: 600
+BEN: 600

@@ -9,13 +9,7 @@
 #ifndef Square_h
 #define Square_h
 
-#include "main.h"
-#include "Border.h"
 #include "Shape.h"
-#define GL_GLEXT_PROTOTYPES
-#include <GLUT/glut.h>
-
-using namespace std;
 
 class Square : public Shape
 {
@@ -33,7 +27,6 @@ public:
 private:
     bool DROP;
     bool GEN;
-    
 };
 
 Square::Square()
@@ -150,7 +143,6 @@ bool Square::moveDown(int board[22][12])
     {
         if(board[Y3+1][X3] != 8 || board[Y4+1][X4] != 8)
         {
-            DROP = false;
             return false;
         }
         
